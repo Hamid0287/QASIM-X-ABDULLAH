@@ -1,272 +1,261 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<head> 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QASIM X ABDULLAH SIM DATABASE</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamid Sim Data Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f0f4f8, #dbe9f4);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        h2 {
+            margin-top: 0;
+        }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: black;
-      color: #fff;
-      overflow: hidden;
-      position: relative;
-    }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-    #matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      background: black;
-    }
+        .header a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
 
-    .container {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      border-radius: 20px;
-      padding: 40px 30px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-    }
+        input[type="text"] {
+            width: calc(100% - 120px);
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 8px 0 0 8px;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
 
-    h1 {
-      font-size: 28px;
-      margin-bottom: 20px;
-      color: #00fff7;
-      text-shadow: 0 0 15px #00fff7;
-    }
+        input[type="text"]:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
 
-    .avatar-wrapper {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 20px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 8px solid #ff0066;
-      box-shadow: 0 0 30px #ff0066;
-      background: #111;
-    }
+        button {
+            margin-top: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
 
-    .avatar-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
 
-    input {
-      width: 100%;
-      padding: 15px;
-      margin: 15px 0;
-      border: none;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      font-size: 16px;
-      outline: none;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
+        #result {
+            color: #333;
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            width: auto;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
 
-    input:focus {
-      background: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 10px #00fff7;
-    }
+        table {
+            width: max-content;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
 
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 10px;
-      background: linear-gradient(90deg, #00fff7, #4facfe);
-      border: none;
-      border-radius: 10px;
-      color: #000;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(0, 255, 247, 0.4);
-    }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
 
-    button:hover {
-      background: linear-gradient(90deg, #4facfe, #00fff7);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0, 255, 247, 0.6);
-    }
+        th {
+            background-color: #d71a20;
+            color: white;
+        }
 
-    .whatsapp-btn {
-      margin-top: 20px;
-      background: linear-gradient(90deg, #25D366, #128C7E);
-      color: #fff;
-    }
+        td {
+            background-color: #f9f9f9;
+            color: black;
+            word-wrap: break-word;
+            width:200px;
+        }
 
-    .whatsapp-btn:hover {
-      background: linear-gradient(90deg, #128C7E, #25D366);
-    }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            padding: 20px;
+            background-color: #dbe6f25e;
+            color: black;
+            border-top: 1px solid #0056b3;
+            border-radius: 0 0 8px 8px;
+        }
 
-    .response-box {
-      background: rgba(255, 255, 255, 0.1);
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 15px;
-      max-height: 300px;
-      overflow-y: auto;
-      color: #fff;
-      text-align: left;
-      font-size: 14px;
-      box-shadow: inset 0 0 10px rgba(0, 255, 247, 0.2);
-    }
+        .footer p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-    .formatted-data {
-      margin-top: 10px;
-      text-align: left;
-    }
+        .footer .whatsapp-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #098072;
+        }
 
-    .formatted-data p {
-      font-size: 16px;
-      line-height: 1.5;
-      margin: 8px 0;
-    }
+        .footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-    .separator {
-      margin: 10px 0;
-      border-top: 2px solid #ff6600;
-      width: 100%;
-    }
+        .footer li {
+            margin: 10px;
+            font-size: 16px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 250px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
 
-    @media screen and (max-width: 600px) {
-      .container {
-        padding: 20px;
-        width: 90%;
-        max-width: 100%;
-      }
+        .footer li:hover {
+            background-color: #e9ecef;
+            transform: scale(1.02);
+        }
 
-      h1 {
-        font-size: 24px;
-      }
-    }
-  </style>
+        .footer li::before {
+            content: '•';
+            color: #007bff;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .whatsapp-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-button:hover {
+            background: linear-gradient(45deg, #128C7E, #25D366);
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .whatsapp-button:active {
+            transform: scale(1);
+        }
+
+        .whatsapp-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .whatsapp-container h3 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <div class="header">
+            <a href="https://hamidsimsdata.info/">Home</a>
+        </div>
 
-  <canvas id="matrix"></canvas>
+        <div class="whatsapp-container">
+            <h3>🚀 Join Our Exclusive WhatsApp Channel Now!</h3>
+            <a href="https://whatsapp.com/channel/0029Vb3mCTp4o7qLAwojlk0x" class="whatsapp-button" target="_blank">Join Now & Stay Updated</a>
+        </div>
 
-  <div class="container">
-    <h1>QASIM X ABDULLAH SIM DATABASE</h1>
+        <form method="POST">
+            <input type="text" name="mobileNumber" placeholder="Enter mobile number">
+            <button type="submit" name="submit">Search</button>
+        </form>
 
-    <div class="avatar-wrapper">
-      <img src="https://i.ibb.co/YT0VHvpR/fam-ofc.jpg" alt="Profile Picture" />
-    </div>
+        <div id="result">
+                    </div>
 
-    <input type="text" id="number" placeholder="Enter phone number" required />
-    <button id="fetchData">Search</button>
-
-    <a href="https://wa.me/923124001592" target="_blank">
-      <button class="whatsapp-btn">Chat on WhatsApp</button>
-    </a>
-
-    <div id="responseBox" class="response-box"></div>
-  </div>
-
-<script>
-  const fetchButton = document.getElementById("fetchData");
-  const responseBox = document.getElementById("responseBox");
-
-  fetchButton.addEventListener("click", async () => {
-    const number = document.getElementById("number").value.trim();
-    responseBox.innerHTML = '';
-
-    if (!number) {
-      alert("Please enter a valid number.");
-      return;
-    }
-
-    responseBox.innerHTML = '<p style="text-align:center;">Fetching data...</p>';
-
-    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://fam-official.serv00.net/sim/api.php?num=${number}`)}`;
-
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      const apiData = JSON.parse(result.contents);
-
-      if (apiData.status === "success" && apiData.data.length > 0) {
-        let formattedData = '';
-        
-        apiData.data.forEach(user => {
-          formattedData += `
-            <div class="formatted-data">
-              <p><strong>🔹 Name:</strong> ${user.Name || "N/A"}</p>
-              <p><strong>🔹 Mobile:</strong> ${user.Mobile || "N/A"}</p>
-              <p><strong>🔹 CNIC:</strong> ${user.CNIC || "N/A"}</p>
-              <p><strong>🔹 Operator:</strong> ${user.Operator || "N/A"}</p>
-              <p><strong>🔹 Address:</strong> ${user.Address || "N/A"}</p>
+        <div class="footer">
+            <div class="whatsapp-container">
+                <p class="whatsapp-text">کسی بھی نمبر کا فرینچائز کا ڈیٹا نکلوانے کے لیے واٹس ایپ پر رابطہ کریں۔ لوکیشن، کال ہسٹری، فیملی ٹری اور شناختی کارڈ کی کاپی وغیرہ کی سروس بھی دستیاب ہے۔</p>
+                <a href="https://wa.me/+923259421220" class="whatsapp-button" target="_blank">Contact on WhatsApp</a>
             </div>
-            <div class="separator"></div>
-          `;
-        });
-
-        responseBox.innerHTML = formattedData;
-      } else {
-        responseBox.innerHTML = `<div class="error">❌ No data found for this number</div>`;
-      }
-    } catch (error) {
-      responseBox.innerHTML = `<div class="error">❌ API Error: ${error.message}</div>`;
-    }
-  });
-</script>
-
-<!-- Matrix Effect Script -->
-<script>
-  const canvas = document.getElementById("matrix");
-  const ctx = canvas.getContext("2d");
-
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
-
-  const letters = "01";
-  const fontSize = 14;
-  const columns = canvas.width / fontSize;
-  const drops = Array.from({ length: columns }).fill(1);
-
-  function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#0F0";
-    ctx.font = fontSize + "px monospace";
-
-    for (let i = 0; i < drops.length; i++) {
-      const text = letters.charAt(Math.floor(Math.random() * letters.length));
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
-    }
-  }
-
-  setInterval(draw, 33);
-</script>
-
+            <p><strong>Our Paid Services:</strong></p>
+            <ul>
+                <li>All network Fresh Number Details (Name, CNIC, Address)</li>
+                <li>All numbers against CNIC</li>
+                <li>Nadra CNIC Verification</li>
+                <li>Pin Point Location</li>
+                <li>Family Tree</li>
+                <li>CDR (Call Data Record)</li>
+                <li>IMEI Tracking (Stolen or Lost Mob Trace)</li>
+                <li>Fake WhatsApp Number</li>
+                <li>Vehicle Details</li>
+                <li>Marriage Certificate (Copy)</li>
+                <li>Death Certificate (Copy)</li>
+                <li>FRC (Family Registration Certificate)</li>
+                <li>Vaccination (Corona, Booster, Polio)</li>
+                <li>Travel History</li>
+                <li>Passport Details</li>
+                <li>Fake Calling Software (Private, Unknown Number)</li>
+                <li>More Trusted Services Available</li>
+            </ul>
+            <a href="https://wa.me/+923259421220" class="whatsapp-button" target="_blank">Contact on WhatsApp</a>
+        </div>
+    </div>
 </body>
 </html>

